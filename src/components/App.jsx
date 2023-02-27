@@ -11,30 +11,28 @@ import css from "./App.module.css";
 export function App() {
   const [images, setImages] = useState([]);
   const [page, setPage] = useState(1);
-  const [per_page, setPer_page] = useState(12);
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [onLoadMore, setOnLoadMore] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [largeImageURL, setLargeImageURL] = useState("");
-  const [error, setError] = useState(null);
 
   useEffect(() => {
-  if (!query) return;
-  const fetchGallery = async () => {
-    setIsLoading(true);
-    try {
-      const { hits, totalHits } = await fetchImages(query, page);
-      setImages((prevImages) => [...prevImages, ...hits]);
-      setOnLoadMore(page < Math.ceil(totalHits / per_page));
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  fetchGallery();
-}, [query, page, per_page]);
+    if (!query) return;
+    const fetchGallery = async () => {
+      setIsLoading(true);
+      try {
+        const { hits, totalHits } = await fetchImages(query, page);
+        setImages((prevImages) => [...prevImages, ...hits]);
+        setOnLoadMore(page < Math.ceil(totalHits / 12));
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchGallery();
+  }, [query, page]);
 
   const onFormSubmit = (query) => {
     setQuery(query);
